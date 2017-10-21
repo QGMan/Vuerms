@@ -30,14 +30,13 @@
 
         <el-row>
             <el-col :span="24">
-                <el-table :data="list" style="width: 100%" :row-class-name="tableRowClassName"
-                @selection-change="getrows">
+                <el-table :data="list" style="width: 100%" :row-class-name="tableRowClassName" @selection-change="getrows">
                     <el-table-column type="selection" width="80">
                     </el-table-column>
                     <el-table-column prop="title" label="标题">
                         <template scope="scope">
                             <router-link v-bind="{to:'/admin/goodsedit/'+scope.row.id}">
-                            {{ scope.row.title }}
+                                {{ scope.row.title }}
                             </router-link>
                         </template>
                     </el-table-column>
@@ -48,14 +47,23 @@
                             {{scope.row.user_name }} / {{scope.row.add_time | datefmt('YYYY-MM-DD') }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="属性" width="100">
+                    <el-table-column prop="name" label="属性" width="120">
+                        <template scope="scope">
+                                <el-tooltip class="item" effect="dark" 
+                                v-bind="{content:(scope.row.is_slide==1?'进入轮播图':'不进入轮播图')}" placement="bottom">
+                                        <i v-bind="{class:'el-icon-picture ls '+ (scope.row.is_slide==1?'imgactive':'')}"></i>
+                                 </el-tooltip>
+                            <i v-bind="{class:'el-icon-upload ls '+ (scope.row.is_top==1?'imgactive':'')}"></i>
+                             <i v-bind="{class:'el-icon-star-on ls '+ (scope.row.is_hot==1?'imgactive':'')}"></i>
+                        </template>
+
                     </el-table-column>
                     <el-table-column label="操作" width="80">
                         <template scope="scope">
-                        <router-link v-bind="{to:'/admin/goodsedit/'+scope.row.id}">
-                            <el-button type="success" size="mini">编辑</el-button>
+                            <router-link v-bind="{to:'/admin/goodsedit/'+scope.row.id}">
+                                <el-button type="success" size="mini">编辑</el-button>
                             </router-link>
-                         
+
                         </template>
                     </el-table-column>
                 </el-table>
@@ -69,7 +77,7 @@
         data() {
             return {
                 // 获取删除数据的商品id字符串，多个id之间使用逗号分隔
-                ids:'',  
+                ids: '',
                 // 搜索框的绑定属性
                 searchValue: '',
                 // 表格中的每行数据来源于list，而这个list将来是通过getlist()方法请求后台api接口获取到的
@@ -82,19 +90,19 @@
         },
         methods: {
             // 1.0 获取到用户勾选的行对象数据
-            getrows(rows){
+            getrows(rows) {
                 this.ids = '';
                 // console.log(rows);
-                var splitchar=',';
-               for(var i=0;i<rows.length;i++){
-                    if(i == rows.length-1){
-                        splitchar='';
+                var splitchar = ',';
+                for (var i = 0; i < rows.length; i++) {
+                    if (i == rows.length - 1) {
+                        splitchar = '';
                     }
 
-                    this.ids+=rows[i].id+splitchar;
-               }
+                    this.ids += rows[i].id + splitchar;
+                }
 
-            //    console.log(this.ids);
+                //    console.log(this.ids);
             },
             // 用axios去发出具体的url的请求获取到数据后绑定到表格中
             getlist() {
