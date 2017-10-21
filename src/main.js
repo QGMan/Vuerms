@@ -64,6 +64,25 @@ import '../statics/css/site.css';
 // 3.0.3 绑定
 Vue.use(elementUI);
 
+// 4.0 定义共有过滤器(全局过滤器)来实现日期字符串的格式化操作
+Vue.filter('datefmt',(input,fmtstring)=>{
+    var mydate = new Date(input);
+    var y = mydate.getFullYear();
+    var m = mydate.getMonth() + 1;
+    var d = mydate.getDate();
+    var h = mydate.getHours();
+    var mi = mydate.getMinutes();
+    var s = mydate.getSeconds();
+
+    if(fmtstring == 'YYYY-MM-DD'){
+        return y + '-' + m + '-' + d;
+    }
+    if(fmtstring == 'YYYY-MM-DD HH:mm:ss'){
+        return y + '-' + m + '-' + d + ' ' + h + ':'+ mi + ':' + s;
+    }
+
+});
+
 new Vue({
     el:'#app',
     // 使用app这个组件对象

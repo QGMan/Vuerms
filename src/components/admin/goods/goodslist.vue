@@ -35,19 +35,27 @@
                     <el-table-column type="selection" width="80">
                     </el-table-column>
                     <el-table-column prop="title" label="标题">
+                        <template scope="scope">
+                            <router-link v-bind="{to:'/admin/goodsedit/'+scope.row.id}">
+                            {{ scope.row.title }}
+                            </router-link>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="categoryname" label="类别" width="100">
                     </el-table-column>
-                    <el-table-column label="发布人/发布时间" width="150">
+                    <el-table-column label="发布人/发布时间" width="170">
                         <template scope="scope">
-                            {{scope.row.user_name }} / {{scope.row.add_time}}
+                            {{scope.row.user_name }} / {{scope.row.add_time | datefmt('YYYY-MM-DD') }}
                         </template>
                     </el-table-column>
                     <el-table-column prop="name" label="属性" width="100">
                     </el-table-column>
                     <el-table-column label="操作" width="80">
                         <template scope="scope">
-                            <a href="#">修改</a>
+                        <router-link v-bind="{to:'/admin/goodsedit/'+scope.row.id}">
+                            <el-button type="success" size="mini">编辑</el-button>
+                            </router-link>
+                         
                         </template>
                     </el-table-column>
                 </el-table>
