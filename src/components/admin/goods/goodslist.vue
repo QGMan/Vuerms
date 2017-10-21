@@ -17,13 +17,14 @@
                 <el-col :span="5">
                     <!-- 新增，删除，全选按钮 -->
                     <el-button>全选</el-button>
-                    <el-button>新增</el-button>
+                    <router-link to="/admin/goodsadd">
+                        <el-button>新增</el-button>
+                    </router-link>
                     <el-button>删除</el-button>
                 </el-col>
                 <el-col :span="3" :offset="16">
                     <!-- 搜索框 -->
-                    <el-input placeholder="请输入搜索条件" icon="search" 
-                    v-model="searchValue" :on-icon-click="getlist">
+                    <el-input placeholder="请输入搜索条件" icon="search" v-model="searchValue" :on-icon-click="getlist">
                     </el-input>
                 </el-col>
             </el-row>
@@ -31,11 +32,7 @@
 
         <el-row>
             <el-col :span="24">
-                <el-table :data="list" 
-                style="width: 100%" 
-                :row-class-name="tableRowClassName"
-                 @selection-change="getrows"
-                 height="400">
+                <el-table :data="list" style="width: 100%" :row-class-name="tableRowClassName" @selection-change="getrows" height="400">
                     <el-table-column type="selection" width="80">
                     </el-table-column>
                     <el-table-column prop="title" label="标题">
@@ -54,12 +51,11 @@
                     </el-table-column>
                     <el-table-column prop="name" label="属性" width="120">
                         <template scope="scope">
-                                <el-tooltip class="item" effect="dark" 
-                                v-bind="{content:(scope.row.is_slide==1?'进入轮播图':'不进入轮播图')}" placement="bottom">
-                                        <i v-bind="{class:'el-icon-picture ls '+ (scope.row.is_slide==1?'imgactive':'')}"></i>
-                                 </el-tooltip>
+                            <el-tooltip class="item" effect="dark" v-bind="{content:(scope.row.is_slide==1?'进入轮播图':'不进入轮播图')}" placement="bottom">
+                                <i v-bind="{class:'el-icon-picture ls '+ (scope.row.is_slide==1?'imgactive':'')}"></i>
+                            </el-tooltip>
                             <i v-bind="{class:'el-icon-upload ls '+ (scope.row.is_top==1?'imgactive':'')}"></i>
-                             <i v-bind="{class:'el-icon-star-on ls '+ (scope.row.is_hot==1?'imgactive':'')}"></i>
+                            <i v-bind="{class:'el-icon-star-on ls '+ (scope.row.is_hot==1?'imgactive':'')}"></i>
                         </template>
 
                     </el-table-column>
@@ -77,15 +73,9 @@
         <el-row>
             <el-col :span="24">
                 <!-- 分页组件的时候 -->
-                    <el-pagination
-                    @size-change="sizeChange"
-                    @current-change="changePage"
-                    :current-page="currentPage"
-                    :page-sizes="[10,20,30,50,100,200]"
-                    :page-size="pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="total">
-                  </el-pagination>
+                <el-pagination @size-change="sizeChange" @current-change="changePage" :current-page="currentPage" :page-sizes="[10,20,30,50,100,200]"
+                    :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
             </el-col>
         </el-row>
     </div>
@@ -100,11 +90,11 @@
                 // 搜索框的绑定属性
                 searchValue: '',
                 // 表示当前第几页
-                currentPage:1,
+                currentPage: 1,
                 // 表示当前的页容量是多少
-                pageSize:10,
+                pageSize: 10,
                 // 当前的数据总条数是多少 （这个数据一定是服务器api接口返回的）
-                total:0,
+                total: 0,
                 // 表格中的每行数据来源于list，而这个list将来是通过getlist()方法请求后台api接口获取到的
                 list: []
             }
@@ -115,15 +105,15 @@
         },
         methods: {
             // 当用户改变分页组件中的页容量的时候触发
-            sizeChange(currentSize){
+            sizeChange(currentSize) {
                 // 将用户选择的页容量值赋值给pagesize
                 this.pageSize = currentSize;
 
-                 // 重新调用getlist()方法去获取到当前页的真实数据
-                 this.getlist();
+                // 重新调用getlist()方法去获取到当前页的真实数据
+                this.getlist();
             },
             // 当用户点击下一页或者某个页码的时候会触发，并且将当前页码传入到pageindex参数
-            changePage(pageindex){
+            changePage(pageindex) {
                 // 将最新的页码赋值给自定义的currentPage
                 this.currentPage = pageindex;
 
@@ -148,7 +138,7 @@
             // 用axios去发出具体的url的请求获取到数据后绑定到表格中
             getlist() {
                 // 1.0 获取url
-                var url = '/admin/goods/getlist?pageIndex='+this.currentPage+'&pageSize='+this.pageSize+'&searchvalue='+this.searchValue;
+                var url = '/admin/goods/getlist?pageIndex=' + this.currentPage + '&pageSize=' + this.pageSize + '&searchvalue=' + this.searchValue;
                 this.$http.get(url).then(res => {
                     // 判断服务器返回的状态status
                     if (res.data.status == 1) {

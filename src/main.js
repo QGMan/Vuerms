@@ -23,13 +23,16 @@ import layout from './components/admin/layout.vue';
 // 导入goodslist.vue
 import goodslist from './components/admin/goods/goodslist.vue';
 
+import goodsadd from './components/admin/goods/goodsadd.vue';
+
 var router = new vueRouter({
     routes:[
         {name:'default',path:'/',redirect:'/admin'},
         {name:'login',path:'/login',component:login},
         {name:'layout',path:'/admin',component:layout,
     children:[
-        {name:'goodslist',path:'goodslist',component:goodslist}
+        {name:'goodslist',path:'goodslist',component:goodslist}, // 商品列表路由规则
+        {name:'goodsadd',path:'goodsadd',component:goodsadd},  // 商品新增路由规则
     ]
 }
     ]
