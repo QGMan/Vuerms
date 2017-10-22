@@ -84,7 +84,7 @@
 <script>
     export default {
         data() {
-            return {
+            return {              
                 // 获取删除数据的商品id字符串，多个id之间使用逗号分隔
                 ids: '',
                 // 搜索框的绑定属性
@@ -101,9 +101,9 @@
         },
         created() {
             // 获取到列表数据
-            this.getlist();
+            this.getlist();           
         },
-        methods: {
+        methods: {           
             // 当用户改变分页组件中的页容量的时候触发
             sizeChange(currentSize) {
                 // 将用户选择的页容量值赋值给pagesize

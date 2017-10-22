@@ -1,7 +1,7 @@
 <template>
-    <div class="accounttmpl">
+    <div class="accounttmpl">      
         <el-row>
-            <el-col :span="8" :offset="6">
+            <el-col :span="8" :offset="8">
                 <el-form :model="form" :rules="rules" ref="form1">
                     <el-form-item label="账号" prop="uname">
                         <el-input v-model="form.uname"></el-input>
@@ -36,6 +36,14 @@
                     ]
                 }
             }
+        }, 
+        // 页面元素生成了
+        mounted(){
+            document.getElementsByTagName('body')[0].style.backgroundColor="#0094ff";
+        },
+        // 当login.vue组件销毁的时候会触发beforeDestroy，destoryed
+        beforeDestroy(){
+            document.getElementsByTagName('body')[0].style.backgroundColor="white";
         },
         methods: {
             // 登录请求

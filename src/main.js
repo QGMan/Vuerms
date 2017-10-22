@@ -63,7 +63,6 @@ form:代表来源路由
 next,要执行一下 next()方法才能正常渲染出组件页面
 */
 router.beforeEach((to, from, next) => {
-    
     // 1.0 如果进入的是登录页面则直接进入即可
     // console.log(to);
     /*
@@ -89,9 +88,38 @@ router.beforeEach((to, from, next) => {
     }
     
   })
+import vuex from 'vuex';
+Vue.use(vuex);
 
+var state = {
+    menuID : '1-1'
+}
 
+var mutations ={
+    changeMenuID(state,menuid){
+        state.menuID = menuid;
+    }
+}
 
+var actions ={
+    changeMenuID({commit},menuid){
+        commit('changeMenuID',menuid);
+    }
+}
+
+var getters ={
+    getMenuID(){
+        return state.menuID;
+    }
+}
+
+const store = new vuex.Store({
+    modules:{
+      global:{
+            state,mutations,actions,getters
+        }
+  }
+  });
 
 // 3.0 使用elementUI这个ui框架的步骤
 // 3.0.1、导包
@@ -133,6 +161,7 @@ new Vue({
     // es5的写法
     // render:function(create){create(App);}
     router,
+    store,
     // es6的写法 :将app当做根组件替换index1.html这个模板中的<div id="app">
     render:create=>create(App)
 });
