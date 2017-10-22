@@ -69,6 +69,8 @@ import layout from './components/admin/layout.vue';
 import goodslist from './components/admin/goods/goodslist.vue';
 
 import goodsadd from './components/admin/goods/goodsadd.vue';
+import goodsedit from './components/admin/goods/goodsedit.vue';
+
 import catelist from './components/admin/goods/catelist.vue';
 
 var router = new vueRouter({
@@ -79,6 +81,7 @@ var router = new vueRouter({
     children:[
         {name:'goodslist',path:'goodslist',component:goodslist,meta:{menuno:'1-1', ischangemenu:true}}, // 商品列表路由规则
         {name:'goodsadd',path:'goodsadd',component:goodsadd},  // 商品新增路由规则
+        {name:'goodsedit',path:'goodsedit/:id',component:goodsedit}, 
         {name:'catelist',path:'catelist',component:catelist,meta:{menuno:'1-2',ischangemenu:true}}, 
     ]
 }
