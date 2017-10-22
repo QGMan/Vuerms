@@ -20,7 +20,7 @@
             <el-row>
                 <el-col :span="5">
                     <!-- 新增，删除，全选按钮 -->
-                    <el-button>全选</el-button>
+                    <el-button @click="selectAll">全选</el-button>
                     <router-link to="/admin/goodsadd">
                         <el-button>新增</el-button>
                     </router-link>
@@ -37,6 +37,7 @@
         <el-row>
             <el-col :span="24">
                 <el-table :data="list" style="width: 100%" :row-class-name="tableRowClassName" 
+                ref="multipleTable"
                 @selection-change="getrows" height="400">
                     <el-table-column type="selection" width="80">
                     </el-table-column>
@@ -109,6 +110,21 @@
             this.getlist();           
         },
         methods: {    
+            // 全选和反选功能
+            selectAll(){
+                var rows = this.list;
+
+                if (rows) {
+                    // 遍历数据数组中的每个对象（代表一行）
+                    rows.forEach(row => {
+                        // 将当前行的checkbox勾选
+                        this.$refs.multipleTable.toggleRowSelection(row);
+                    });
+                    } else {
+                         // 将当前行的checkbox反选
+                        this.$refs.multipleTable.clearSelection();
+                    }
+            },
             // 删除商品数据的方法
             deldata(){
                 if(this.ids.length<=0){
