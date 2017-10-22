@@ -24,7 +24,7 @@
                     <router-link to="/admin/goodsadd">
                         <el-button>新增</el-button>
                     </router-link>
-                    <el-button>删除</el-button>
+                    <el-button @click="deldata">删除</el-button>
                 </el-col>
                 <el-col :span="3" :offset="16">
                     <!-- 搜索框 -->
@@ -36,7 +36,8 @@
 
         <el-row>
             <el-col :span="24">
-                <el-table :data="list" style="width: 100%" :row-class-name="tableRowClassName" @selection-change="getrows" height="400">
+                <el-table :data="list" style="width: 100%" :row-class-name="tableRowClassName" 
+                @selection-change="getrows" height="400">
                     <el-table-column type="selection" width="80">
                     </el-table-column>
                     <el-table-column prop="title" label="标题">
@@ -108,6 +109,37 @@
             this.getlist();           
         },
         methods: {    
+            // 删除商品数据的方法
+            deldata(){
+                if(this.ids.length<=0){
+                    this.$message.error('请勾选你要删除的数据');
+                    return;
+                }
+
+                this.$confirm('您确认要删除数据吗?', '删除提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                    }).then(() => {
+                        
+                            // 执行删除逻辑请求
+                            this.$http.get('/admin/goods/del/'+this.ids)
+                            .then(res=>{
+                                // 判断服务器是否处理成功
+                                if(res.data.status ==1){
+                                    this.$message.error(res.data.message);
+                                    return;
+                                }
+
+                                // 如果服务器成功则数组列表
+                                this.getlist();
+                            });
+
+
+                    }).catch(() => {
+                       // 如果用户点击取消，自动关闭对话框
+                    });
+            },
             upatemenuid(){
                 // 修改vuex中定义的state中的menuid
                 this.$store.dispatch('changeMenuID','1-2');
@@ -141,7 +173,7 @@
                     this.ids += rows[i].id + splitchar;
                 }
 
-                //    console.log(this.ids);
+                //    console.log(this.ids);               
             },
             // 用axios去发出具体的url的请求获取到数据后绑定到表格中
             getlist() {
