@@ -38,7 +38,6 @@ var router = new vueRouter({
     ]
 });
 
-
 // 2.0 axios的使用
 // 2.0.1 导入axios包
 import axios from 'axios';
@@ -49,8 +48,50 @@ axios.defaults.baseURL = 'http://157.122.54.189:9095';
 //就要将axios对象挂载到vue的原型属性$http上
 Vue.prototype.$http = axios;
 
+// 设定axios的参数使得axios发出的ajax请求能够自动带上cookie
+axios.defaults.withCredentials = true;
+
 // 2.0.4 绑定到vue上
 Vue.use(axios);
+
+
+
+// 路由全局守卫（路由钩子函数）
+/*
+to: 当前要进入的路由
+form:代表来源路由
+next,要执行一下 next()方法才能正常渲染出组件页面
+*/
+router.beforeEach((to, from, next) => {
+    
+    // 1.0 如果进入的是登录页面则直接进入即可
+    // console.log(to);
+    /*
+     to:Object {name: "login", meta: Object, path: "/login", hash: "", query: Object…}
+    */ 
+    if(to.name == "login"){
+        // 当进入到的是登录页面，则不应该检查是否登录
+        next();
+    }
+    else{
+    // 发出 /admin/account/isloing 这个url的请求，如果它返回的是logined表示登录过，所以要执行next（）进程进入到想要
+    // 进入的组件页面，否则跳转到登录页面
+    // 1.0 发出ajax请求到/admin/account/isloing
+    axios.get('/admin/account/islogin').then(res=>{
+        // 如果res.data.code =="logined" 表示登录过
+        if(res.data.code =="logined"){
+            next();
+        }else{
+            // 跳转到登录页面
+            router.push({name:'login'});
+        }
+    });
+    }
+    
+  })
+
+
+
 
 // 3.0 使用elementUI这个ui框架的步骤
 // 3.0.1、导包
