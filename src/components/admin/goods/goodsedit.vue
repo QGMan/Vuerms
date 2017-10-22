@@ -225,7 +225,10 @@
                         // 如果表单的所有元素值均合法，valid则返回true
                         if (valid) {
                             // ajax提交数据进行编辑操作
-                           
+                           this.$http.post('/admin/goods/edit/'+this.$route.params.id,this.form)
+                           .then(res=>{
+                               this.$router.push({name:'goodslist'});
+                           });
                             // console.log(this.form);
                         } else {
                             console.log('error submit!!');
