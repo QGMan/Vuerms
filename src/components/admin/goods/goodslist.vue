@@ -8,6 +8,10 @@
                         <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
                         <el-breadcrumb-item>商品管理</el-breadcrumb-item>
                         <el-breadcrumb-item>商品列表</el-breadcrumb-item>
+
+                        menuid={{ this.$store.state.global.menuid }}
+
+                        <el-button @click="upatemenuid">修改菜单id</el-button>
                     </el-breadcrumb>
                 </div>
             </el-col>
@@ -103,7 +107,11 @@
             // 获取到列表数据
             this.getlist();           
         },
-        methods: {           
+        methods: {    
+            upatemenuid(){
+                // 修改vuex中定义的state中的menuid
+                this.$store.dispatch('changeMenuID','1-2');
+            }   ,    
             // 当用户改变分页组件中的页容量的时候触发
             sizeChange(currentSize) {
                 // 将用户选择的页容量值赋值给pagesize

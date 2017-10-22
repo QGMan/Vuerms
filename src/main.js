@@ -7,6 +7,51 @@ import Vue from 'vue';
 // var App = require('./App.vue');
 import App from './App.vue';
 
+// 导入vuex
+import vuex from 'vuex';
+// 将vuex对象绑定到Vue中
+Vue.use(vuex);
+
+// 这个是在组件页面中 通过  store.state.menuid
+var state = {
+    menuid:'1-1'
+}
+
+
+var actions = {
+    // 这个方法在组件页面上使用 store.dispatch('actions中定义的方法名称',向这个方法中传入的参数值)
+    changeMenuID({commit},menuid){
+        // 触发mutations中定义的方法
+        commit('changeMenuID',menuid);
+    }
+}
+
+// 内部的一个对象，供actions来进行调用处理的，所以在组件中不能访问这些方法
+var mutations = {
+    changeMenuID(state,menuid){
+        state.menuid = menuid;
+    }
+}
+
+// 对state对象中的一些属性值进行逻辑封装的时候
+var getters = {
+   
+}
+
+
+// 将所有的state,actions,mutations,getters当做一个模块使用
+// var store = new vuex.Store({
+//     state,actions,mutations,getters
+// });
+
+// 区分不同的模块
+var store = new vuex.Store({
+    modules:{    
+        global:{  
+            state,actions,mutations,getters
+        }       
+    }
+});
 
 // 1.0 路由的写法
 // 1.0.0 导包
@@ -24,6 +69,7 @@ import layout from './components/admin/layout.vue';
 import goodslist from './components/admin/goods/goodslist.vue';
 
 import goodsadd from './components/admin/goods/goodsadd.vue';
+import catelist from './components/admin/goods/catelist.vue';
 
 var router = new vueRouter({
     routes:[
@@ -31,8 +77,9 @@ var router = new vueRouter({
         {name:'login',path:'/login',component:login},
         {name:'layout',path:'/admin',component:layout,
     children:[
-        {name:'goodslist',path:'goodslist',component:goodslist}, // 商品列表路由规则
+        {name:'goodslist',path:'goodslist',component:goodslist,meta:{menuno:'1-1'}}, // 商品列表路由规则
         {name:'goodsadd',path:'goodsadd',component:goodsadd},  // 商品新增路由规则
+        {name:'catelist',path:'catelist',component:catelist,meta:{menuno:'1-2'}}, 
     ]
 }
     ]
@@ -55,6 +102,21 @@ axios.defaults.withCredentials = true;
 Vue.use(axios);
 
 
+var menulist={
+    '1-1':'goodslist',
+    '1-2':'catelist'
+}
+
+
+// router.afterEach((to,from)=>{
+
+//     // 根据当前localStorage中的menuno从menulist中获取到路由规则的名称通过vue-router的编程式导航进行跳转即可
+//     var routerName = menulist[localStorage.getItem('currentMenuNo')];
+//     if(routerName){
+//         router.push({name:routerName});
+//     }
+
+// });
 
 // 路由全局守卫（路由钩子函数）
 /*
@@ -62,12 +124,20 @@ to: 当前要进入的路由
 form:代表来源路由
 next,要执行一下 next()方法才能正常渲染出组件页面
 */
+
 router.beforeEach((to, from, next) => {
     // 1.0 如果进入的是登录页面则直接进入即可
     // console.log(to);
     /*
      to:Object {name: "login", meta: Object, path: "/login", hash: "", query: Object…}
     */ 
+// 如果当前进入到的路由规则上有meta.menuno的话就将其设置到 localStorage中
+
+    if(to.meta.menuno){
+        // localStorage.setItem('currentMenuNo',to.meta.menuno);
+        store.dispatch('changeMenuID',to.meta.menuno);
+    }
+
     if(to.name == "login"){
         // 当进入到的是登录页面，则不应该检查是否登录
         next();
@@ -85,41 +155,8 @@ router.beforeEach((to, from, next) => {
             router.push({name:'login'});
         }
     });
-    }
-    
+    }    
   })
-import vuex from 'vuex';
-Vue.use(vuex);
-
-var state = {
-    menuID : '1-1'
-}
-
-var mutations ={
-    changeMenuID(state,menuid){
-        state.menuID = menuid;
-    }
-}
-
-var actions ={
-    changeMenuID({commit},menuid){
-        commit('changeMenuID',menuid);
-    }
-}
-
-var getters ={
-    getMenuID(){
-        return state.menuID;
-    }
-}
-
-const store = new vuex.Store({
-    modules:{
-      global:{
-            state,mutations,actions,getters
-        }
-  }
-  });
 
 // 3.0 使用elementUI这个ui框架的步骤
 // 3.0.1、导包
@@ -161,7 +198,7 @@ new Vue({
     // es5的写法
     // render:function(create){create(App);}
     router,
-    store,
+    store:store,    //在组件中可以使用  this.$store.state.menuid获取到菜单id 可以通过this.$store.dispath('changeMenuID','1-2');来改变menuid的值
     // es6的写法 :将app当做根组件替换index1.html这个模板中的<div id="app">
     render:create=>create(App)
 });

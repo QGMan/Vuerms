@@ -6,15 +6,17 @@
             <el-col :span="leftcol">
                 <img src="../../../statics/imgs/logo.png" alt="">
                 <div class="layout menu">
-                   <el-menu default-active="1-2" class="el-menu-vertical-demo" :collapse="iscollapse" >
+                   <el-menu :default-active="this.$store.state.menuid" class="el-menu-vertical-demo" :collapse="iscollapse" >
                        <!--购物商城  -->
                     <el-submenu index="1">
                             <template slot="title"><i class="el-icon-message"></i>购物商城</template>
                             <el-menu-item-group>    
                             <router-link to="/admin/goodslist">                    
                              <el-menu-item index="1-1">内容管理</el-menu-item>
-                            </router-link>   
+                            </router-link>  
+                            <router-link to="/admin/catelist">        
                             <el-menu-item index="1-2">类别管理</el-menu-item>
+                            </router-link>
                             <el-menu-item index="1-3">评论管理</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
@@ -73,6 +75,7 @@
     export default {
         data() {
             return {
+                mid:'1-1',
                 // 这个属性主要是用来控制el-menu菜单的展开和收缩的
                 // false: 展开  true:收缩
                 iscollapse:false ,
@@ -81,6 +84,9 @@
                 // 控制右边菜单栏的宽度的
                 rightcol:20
             }
+        },
+        created(){
+            this.mid = localStorage.getItem('currentMenuNo');
         },
         methods: {
            showhide(){
