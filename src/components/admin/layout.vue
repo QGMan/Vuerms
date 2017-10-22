@@ -6,7 +6,7 @@
             <el-col :span="leftcol">
                 <img src="../../../statics/imgs/logo.png" alt="">
                 <div class="layout menu">
-                   <el-menu :default-active="this.$store.state.menuid" class="el-menu-vertical-demo" :collapse="iscollapse" >
+                   <el-menu :default-active="this.$store.state.global.menuid" class="el-menu-vertical-demo" :collapse="iscollapse" >
                        <!--购物商城  -->
                     <el-submenu index="1">
                             <template slot="title"><i class="el-icon-message"></i>购物商城</template>
@@ -84,9 +84,11 @@
                 // 控制右边菜单栏的宽度的
                 rightcol:20
             }
-        },
+        },      
         created(){
-            this.mid = localStorage.getItem('currentMenuNo');
+        //    从localStorage中获取到key 等于 mName对应的之前用户选择的路由名称
+        var currentRouteName = localStorage.getItem('mName');
+        this.$router.push({name:currentRouteName});
         },
         methods: {
            showhide(){

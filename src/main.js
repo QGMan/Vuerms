@@ -49,7 +49,7 @@ var store = new vuex.Store({
     modules:{    
         global:{  
             state,actions,mutations,getters
-        }       
+        }
     }
 });
 
@@ -77,9 +77,9 @@ var router = new vueRouter({
         {name:'login',path:'/login',component:login},
         {name:'layout',path:'/admin',component:layout,
     children:[
-        {name:'goodslist',path:'goodslist',component:goodslist,meta:{menuno:'1-1'}}, // 商品列表路由规则
+        {name:'goodslist',path:'goodslist',component:goodslist,meta:{menuno:'1-1', ischangemenu:true}}, // 商品列表路由规则
         {name:'goodsadd',path:'goodsadd',component:goodsadd},  // 商品新增路由规则
-        {name:'catelist',path:'catelist',component:catelist,meta:{menuno:'1-2'}}, 
+        {name:'catelist',path:'catelist',component:catelist,meta:{menuno:'1-2',ischangemenu:true}}, 
     ]
 }
     ]
@@ -133,8 +133,12 @@ router.beforeEach((to, from, next) => {
     */ 
 // 如果当前进入到的路由规则上有meta.menuno的话就将其设置到 localStorage中
 
+// 1.0 将当前用户选择菜单所对应的路由规则的名称保存到localStorage中
+if(to.meta.ischangemenu){
+    localStorage.setItem('mName',to.name);
+}
+
     if(to.meta.menuno){
-        // localStorage.setItem('currentMenuNo',to.meta.menuno);
         store.dispatch('changeMenuID',to.meta.menuno);
     }
 

@@ -2,7 +2,7 @@
     <div class="tmpl">
             catelist
 
-            {{this.$store.state.menuid}}
+            {{this.$store.state.global.menuid}}
     </div>
 </template>
 
